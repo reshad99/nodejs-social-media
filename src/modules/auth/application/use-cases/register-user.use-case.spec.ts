@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
 import { PasswordHasherPort } from '../../../../shared/application/ports/password-hasher.port';
-import { UserGender } from '../../../users/domain/entities/user.entity';
+import { User, UserGender } from '../../../users/domain/entities/user.entity';
 import { UserRepository } from '../../../users/domain/repositories/user.repository';
 import { RegisterUserUseCase } from './register-user.use-case';
 
@@ -12,7 +12,7 @@ describe('RegisterUserUseCase', () => {
       firstName: 'Ali',
       gender: UserGender.MALE,
     };
-    const registeredUser = {
+    const registeredUser: User = {
       id: 1,
       email: command.email,
       passwordHash: 'hashed-password',
@@ -20,6 +20,7 @@ describe('RegisterUserUseCase', () => {
       lastName: null,
       gender: command.gender,
       isActive: true,
+      birthDate: null,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -29,6 +30,7 @@ describe('RegisterUserUseCase', () => {
     };
     const passwordHasher = {
       hash: jest.fn().mockResolvedValue('hashed-password'),
+      compare: jest.fn().mockResolvedValue(false),
     };
     const useCase = new RegisterUserUseCase(
       users as unknown as UserRepository,
